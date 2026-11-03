@@ -1,0 +1,57 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Logs y archivos temporales ###
+*.log
+logs/
+temp/
+tmp/
+
+### Configuraciones del Sistema Operativo ###
+.DS_Store
+Thumbs.db
+
+
+### Archivos de propiedades de Spring (Sensibles) ###
+**/src/main/resources/application-local.properties
+
+### Docker & Bases de Datos locales ###
+.docker/
+docker-data/
+postgres-data/
+mysql-data/
+
+### Archivos de entorno ###
+.env
+.env.local

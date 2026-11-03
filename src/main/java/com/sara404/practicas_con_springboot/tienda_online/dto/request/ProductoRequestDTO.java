@@ -1,0 +1,23 @@
+package com.sara404.practicas_con_springboot.tienda_online.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+
+public record ProductoRequestDTO(
+    
+    @NotBlank (message = "El nombre del producto no puede estar vacío")
+    @NotNull (message = "El nombre del producto es obligatorio")
+    String nombreProducto,
+
+    @NotNull (message = "El precio del producto es obligatorio")
+    @PositiveOrZero (message = "El precio de un producto no puede ser negativo")
+    double precio,
+
+    @NotNull (message = "El stock es obligatorio")
+    @PositiveOrZero (message = "El stock no puede ser negativo")
+    int stock
+
+) {
+
+}
