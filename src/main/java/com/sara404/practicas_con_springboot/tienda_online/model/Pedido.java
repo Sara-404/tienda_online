@@ -1,5 +1,6 @@
 package com.sara404.practicas_con_springboot.tienda_online.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Column;
@@ -29,12 +30,12 @@ public class Pedido {
 
     private int cantidad;
     private LocalDate fecha;
-    @Column(name = "precio_pedido")
-    private double precioPedido;
+    @Column(name = "precio_pedido", precision = 10, scale = 2)
+    private BigDecimal precioPedido;
 
     public Pedido(){}
 
-    public Pedido(Cliente cliente, Producto producto, int cantidad, LocalDate fecha, double precioPedido) {
+    public Pedido(Cliente cliente, Producto producto, int cantidad, LocalDate fecha, BigDecimal precioPedido) {
         this.cliente = cliente;
         this.producto = producto;
         this.cantidad = cantidad;
@@ -82,11 +83,11 @@ public class Pedido {
         this.fecha = fecha;
     }
 
-    public double getPrecioPedido() {
+    public BigDecimal getPrecioPedido() {
         return precioPedido;
     }
 
-    public void setPrecioPedido(double precioPedido) {
+    public void setPrecioPedido(BigDecimal precioPedido) {
         this.precioPedido = precioPedido;
     }
 

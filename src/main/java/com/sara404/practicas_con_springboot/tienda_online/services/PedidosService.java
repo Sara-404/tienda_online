@@ -1,13 +1,13 @@
 package com.sara404.practicas_con_springboot.tienda_online.services;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.sara404.practicas_con_springboot.tienda_online.dto.request.PedidoRequestDTO;
-import com.sara404.practicas_con_springboot.tienda_online.dto.response.ClienteResponseDTO;
 import com.sara404.practicas_con_springboot.tienda_online.dto.response.PedidoResponseDTO;
-import com.sara404.practicas_con_springboot.tienda_online.dto.response.ProductoResponseDTO;
 import com.sara404.practicas_con_springboot.tienda_online.model.Cliente;
 import com.sara404.practicas_con_springboot.tienda_online.model.Pedido;
 import com.sara404.practicas_con_springboot.tienda_online.model.Producto;
@@ -30,15 +30,17 @@ public class PedidosService {
         this.productoService = productoService;
     }
 
+
     @Transactional
     public PedidoResponseDTO createPedido(PedidoRequestDTO pedidoRequest) throws Exception{
-
+        //Obtenemos cliente, producto, cantidad y fecha
         Cliente cliente = clienteService.getCliente(pedidoRequest.idCliente());
         Producto producto = productoService.getProducto(pedidoRequest.idProducto());
-
-        double precioPedido = pedidoRequest.precioPedido();
         int cantidad = pedidoRequest.cantidad();
         LocalDate fecha = pedidoRequest.fecha();
+        
+        //Calculamos el precio del pedido según el precio del producto y la cantidad
+        BigDecimal precioPedido = producto.getPrecio().multiply(BigDecimal.valueOf(cantidad));
         
         //descontamos saldo y stock
         clienteService.descontarSaldo(precioPedido, cliente);
@@ -47,10 +49,11 @@ public class PedidosService {
         //guardar pedido
         Pedido pedido = pedidosRepository.save(new Pedido(cliente, producto, cantidad, fecha, precioPedido));
 
-        ClienteResponseDTO clienteResponse = new ClienteResponseDTO(cliente.getIdCliente(), cliente.getNombreCliente(), cliente.getEmail(), cliente.getSaldo());
-        ProductoResponseDTO productoResponse = new ProductoResponseDTO(producto.getIdProducto(), producto.getNombreProducto(), producto.getPrecio(), producto.getStock());
-        
         //devolver pedidoResponseDTO
-        return new PedidoResponseDTO(pedido.getIdPedido(), cantidad, fecha, precioPedido, clienteResponse, productoResponse);
+        return PedidoResponseDTO.fromEntity(pedido);
+    }
+
+    public List<PedidoResponseDTO> getListaPedidos(Long id){
+        return pedidosRepository.findAllPedidosByClientId(id).stream().map(pedido -> PedidoResponseDTO.fromEntity(pedido)).toList();
     }
 }

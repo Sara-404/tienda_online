@@ -55,3 +55,6 @@ mysql-data/
 ### Archivos de entorno ###
 .env
 .env.local
+
+### Registro de cambios para el commit ###
+temp_registro.md

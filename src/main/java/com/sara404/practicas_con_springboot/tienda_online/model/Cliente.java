@@ -1,5 +1,6 @@
 package com.sara404.practicas_con_springboot.tienda_online.model;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class Cliente {
     @Column(name = "nombre_cliente")
     private String nombreCliente;
     private String email;
-    private double saldo;
+    @Column(name = "saldo", precision = 10, scale = 2)
+    private BigDecimal saldo;
 
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -29,7 +31,7 @@ public class Cliente {
     
     protected Cliente(){}
     
-    public Cliente(String nombre, String email, double saldo) {
+    public Cliente(String nombre, String email, BigDecimal saldo) {
         this.nombreCliente = nombre;
         this.email = email;
         this.saldo = saldo;
@@ -59,11 +61,11 @@ public class Cliente {
         this.email = email;
     }
 
-    public double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
 

@@ -1,5 +1,7 @@
 package com.sara404.practicas_con_springboot.tienda_online.dto.request;
 
+import java.math.BigDecimal;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,5 +17,5 @@ public record ClienteRequestDTO(
     
     @NotNull (message = "El saldo es obligatorio")
     @PositiveOrZero (message = "El saldo no puede ser negativo")
-    Double saldo
+    BigDecimal saldo
 ) {}

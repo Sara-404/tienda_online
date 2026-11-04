@@ -7,18 +7,20 @@ El objetivo principal de este proyecto es aplicar las mejores prácticas del eco
 
 ---
 
-## 🛠️ Tecnologías y Herramientas Utilizadas
+## Tecnologías y Herramientas Utilizadas
 
 * **Java 17**
 * **Spring Boot 4.1.2**
 * **Spring Data JPA** (Persistencia de datos)
 * **Spring Boot Validation** (Validación de datos de entrada)
 * **Base de Datos:** MySQL
+* **Contenedores e Infraestructura:** Docker & Docker Compose (Virtualización de la base de datos en local)
+* **Documentación de API:** OpenAPI / Swagger UI
 * **Gestor de Dependencias:** Maven
 
 ---
 
-## 🚀 Arquitectura y Buenas Prácticas
+## Arquitectura y Buenas Prácticas
 
 El proyecto sigue una arquitectura limpia en capas para mantener el código desacoplado y fácil de mantener:
 
@@ -29,21 +31,23 @@ El proyecto sigue una arquitectura limpia en capas para mantener el código desa
 
 ---
 
-## 🛣️ Endpoints Principales
+## Endpoints Principales
 
 ### Clientes (`/api/clientes`)
 * `POST /api/clientes` - Registra un nuevo cliente (Devuelve `201 Created` con su URI).
-<!-- TODO * `GET /api/clientes/{id}` - Obtiene el detalle de un cliente.-->
+* `GET /api/clientes/{id}` - Obtiene el detalle de un cliente (Devuelve `200 OK`).
 
 ### Productos (`/api/productos`)
-<!-- TODO * `GET /api/productos` - Lista todos los productos disponibles.-->
 * `POST /api/productos` - Registra un nuevo producto (Devuelve `201 Created` con su URI).
+* `GET /api/productos` - Lista todos los productos disponibles (Devuelve `200 OK`).
+* `GET /api/productos/{id}` - Obtiene el detalle de un producto (Devuelve `200 OK`).
 
 ### Pedidos (`/api/pedidos`)
-* `POST /api/pedidos` - Crea un nuevo pedido, validando stock y saldo de forma transaccional, comprobando antes que el cliente y el producto existan en la base de datos.
+* `POST /api/pedidos` - Crea un nuevo pedido, validando stock y saldo de forma transaccional, comprobando antes que el cliente y el producto existan en la base de datos (Devuelve `201 Created` con su URI).
+* `GET /api/pedidos/{idCliente}` - Lista los pedidos que ha hecho un cliente según su id (Devuelve `200 OK`).
 
 ---
-## ⚙️ Configuración e Instalación Local
+## Configuración e Instalación Local
 
 ### Requisitos Previos
 * **Java 17** (JDK) instalado.
@@ -55,7 +59,7 @@ El proyecto utiliza Docker para levantar la base de datos de manera aislada y va
 
 1. **Clona el repositorio:**
    ```bash
-   git clone URL
+   git clone https://github.com/Sara-404/tienda_online
    cd tienda_online
    ```
 
@@ -77,20 +81,25 @@ El proyecto utiliza Docker para levantar la base de datos de manera aislada y va
    ```
 
 4. **Compila y ejecuta la aplicación de Spring Boot:**
-   Una vez que el contenedor esté corriendo, arranca la API desde tu terminal:
+   Una vez que el contenedor esté en ejecución, arranca la API desde tu terminal:
    ```bash
    ./mvnw spring-boot:run
    ```
    La API estará disponible y escuchando peticiones en `http://localhost:8080`.
 
+### Documentación Interactiva (Swagger / OpenAPI)
+Una vez que la aplicación esté en ejecución, puedes explorar, probar e interactuar con todos los endpoints de la API de forma visual desde tu navegador web:
+
+* **Interfaz de Swagger UI:** [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+* **Documentación OpenAPI (JSON):** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
 ---
-<!--
-## 📈 Próximos Pasos (En Desarrollo)
+## Próximos Pasos (En Desarrollo)
 Como parte de mi proceso de aprendizaje, tengo planeado añadir próximamente:
+* [x] Documentar los endpoints de forma interactiva utilizando **Swagger / OpenAPI**.
+* [ ] Métodos de actualización y de borrado de todas las entidades de la base de datos.
 * [ ] Añadir paginación y ordenamiento.
 * [ ] Implementar pruebas unitarias y de integración.
 * [ ] Añadir seguridad con **Spring Security**.
-* [ ] Documentar los endpoints de forma interactiva utilizando **Swagger / OpenAPI**.
 
 ---
--->
