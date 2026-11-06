@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -23,6 +24,27 @@ public class GlobalExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<Map<String, String>> manejarErroresValidacionMetodo(
+        HandlerMethodValidationException e
+    ) {
+        Map<String, String> errores = new HashMap<>();
+        e.getParameterValidationResults().forEach(resultado -> {
+
+            String nombreParametro = resultado.getMethodParameter()
+                    .getParameterName();
+
+            resultado.getResolvableErrors().forEach(error -> {
+
+                errores.put(
+                        nombreParametro,
+                        error.getDefaultMessage());
+
+            });
+        });
+        return ResponseEntity.badRequest().body(errores);
     }
 
     @ExceptionHandler(EntidadNoExisteException.class)

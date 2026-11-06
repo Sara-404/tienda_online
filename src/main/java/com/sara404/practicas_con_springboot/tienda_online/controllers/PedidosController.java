@@ -15,6 +15,8 @@ import com.sara404.practicas_con_springboot.tienda_online.dto.response.PedidoRes
 import com.sara404.practicas_con_springboot.tienda_online.services.PedidosService;
 
 import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -50,6 +52,10 @@ public class PedidosController {
     }
     
 
-    //TODO métodos de modificación de un pedido por su id (PUT todos los campos y/o PATCH con campos específicos)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> cancelarPedido(@PathVariable Long id){
+        service.cancelarPedido(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

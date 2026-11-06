@@ -8,12 +8,15 @@ import org.springframework.stereotype.Service;
 
 import com.sara404.practicas_con_springboot.tienda_online.dto.request.PedidoRequestDTO;
 import com.sara404.practicas_con_springboot.tienda_online.dto.response.PedidoResponseDTO;
+import com.sara404.practicas_con_springboot.tienda_online.exceptions.EntidadNoExisteException;
+import com.sara404.practicas_con_springboot.tienda_online.exceptions.SaldoInsuficienteException;
+import com.sara404.practicas_con_springboot.tienda_online.exceptions.StockInsuficienteException;
 import com.sara404.practicas_con_springboot.tienda_online.model.Cliente;
 import com.sara404.practicas_con_springboot.tienda_online.model.Pedido;
 import com.sara404.practicas_con_springboot.tienda_online.model.Producto;
 import com.sara404.practicas_con_springboot.tienda_online.repository.PedidosRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service 
 public class PedidosService {
@@ -32,7 +35,9 @@ public class PedidosService {
 
 
     @Transactional
-    public PedidoResponseDTO createPedido(PedidoRequestDTO pedidoRequest) throws Exception{
+    public PedidoResponseDTO createPedido(PedidoRequestDTO pedidoRequest) 
+        throws EntidadNoExisteException, SaldoInsuficienteException, StockInsuficienteException
+        {
         //Obtenemos cliente, producto, cantidad y fecha
         Cliente cliente = clienteService.getCliente(pedidoRequest.idCliente());
         Producto producto = productoService.getProducto(pedidoRequest.idProducto());
@@ -53,7 +58,32 @@ public class PedidosService {
         return PedidoResponseDTO.fromEntity(pedido);
     }
 
+    @Transactional(readOnly = true)
     public List<PedidoResponseDTO> getListaPedidos(Long id){
         return pedidosRepository.findAllPedidosByClientId(id).stream().map(pedido -> PedidoResponseDTO.fromEntity(pedido)).toList();
     }
+
+    @Transactional(readOnly = true)
+    public Pedido getPedido(Long id) throws EntidadNoExisteException{
+        return pedidosRepository.findById(id).orElseThrow(() -> new EntidadNoExisteException("El pedido con el id " + id + " no existe"));
+    }
+
+    @Transactional
+    public void cancelarPedido(Long id){
+        Pedido pedido = getPedido(id);
+        
+        //devolver el dinero al cliente
+        Cliente cliente = pedido.getCliente();
+        BigDecimal precio = pedido.getPrecioPedido();
+        cliente.setSaldo(cliente.getSaldo().add(precio));
+        
+        //devolver el stock a producto
+        Producto producto = pedido.getProducto();
+        int cantidad = pedido.getCantidad();
+        producto.setStock(producto.getStock() + cantidad);
+
+        //eliminar pedido
+        pedidosRepository.delete(pedido);
+    }
+
 }
